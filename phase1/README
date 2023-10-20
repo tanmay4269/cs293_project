@@ -4,3 +4,9 @@ iml.cpp contains the code for reading data from the inputs and passing it to tra
 trader.cpp should contain your algorithm for reading from the socket and printing trades to standard output
 receiver.h contains the code for the receiver used for reading from the socket.
 Use rcv.readIML() to read the input string.
+
+# Our implementation
+1. Always accept first offer
+2. accept b# (=== we will sell) if price > buffer_price 
+3. accept s# (=== we will buy)  if price < buffer_price
+4. do these individually for each stock

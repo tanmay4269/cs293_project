@@ -1,0 +1,3 @@
+ASML 650 s#
+ASML 645 b#
+AAPL 430 b#
