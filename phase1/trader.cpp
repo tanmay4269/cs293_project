@@ -37,7 +37,6 @@ int main() {
     sleep(5);
     string message = rcv.readIML();
 
-    // string message = "ASML 650 s#ASML 645 b#AAPL 430 b#$";
     message.pop_back();
     message.pop_back();
 
@@ -47,12 +46,9 @@ int main() {
 
     vector<string> responces;
 
-    cout << orders.size() << endl;
-
     for(string order : orders) {
         vector<string> words = split_sentence(order, ' ');
         string stock = words[0];
-        cout << words[0] << " " << words[1] << " " << words[2] << endl;
         int price = stoi(words[1]);
         string direction = words[2];
 
@@ -66,7 +62,6 @@ int main() {
                 responces.push_back("No trade");
             }
      }
-    cout << "Doubt\n"; 
     message = "";
     for(auto responce : responces) {
         message += responce + "\n";
