@@ -48,20 +48,35 @@ int main() {
 
     for(string order : orders) {
         vector<string> words = split_sentence(order, ' ');
-        string stock = words[0];
-        int price = stoi(words[1]);
-        string direction = words[2];
+        vector<string> stocks;
+        vector<string> qttys;
 
-            if( price_buffers.find(stock) == price_buffers.end() || 
-                accept_trade(price_buffers[stock], price, direction)) {
+        int i = 0;
+        for(; i < words.size() - 1 - 2; i += 2) {
+            stocks[i] = words[i];
+            qttys[i] = stoi(words[i+1]);
+        }
+        int price = stoi(words[i]);
+        string direction = words[i+1];
+
+        // single stock order
+        if(words.size() == 4) {
+            if(price_buffers.find(stocks[0]) == price_buffers.end() || 
+                accept_trade(price_buffers[stocks[0]], price, direction)) {
                 string dir = (direction == "s") ? "b" : "s";
-                string responce = stock + " " + to_string(price) + " " + dir;
-                price_buffers[stock] = price;
+                string responce = stocks[0] + " " + to_string(price) + " " + dir;
+                price_buffers[stocks[0]] = price;
                 responces.push_back(responce);
             } else {
                 responces.push_back("No trade");
             }
-     }
+        } 
+        // multi-stock order
+        else {
+            
+        }
+    }
+
     message = "";
     for(auto responce : responces) {
         message += responce + "\n";
