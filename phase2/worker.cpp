@@ -24,7 +24,8 @@ void* workerThread(void* arg) {
         }
 
         // Perform some work based on the current time
-        std::this_thread::sleep_for(std::chrono::milliseconds(500)); // Simulate work
+        // std::this_thread::sleep_for(std::chrono::milliseconds(500)); // Simulate work
+        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // Simulate work
 
         // Increment the shared timer
         if (thread_id == 1)
