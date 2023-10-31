@@ -1,6 +1,7 @@
 #include "receiver.h"
 // #include "iostream"
 // #include "string"
+#include <cmath>
 #include "vector"
 #include "map"
 using namespace std;
@@ -31,6 +32,19 @@ bool accept_trade(int old_price, int curr_price, string direction) {
     return false;
 }
 
+// Function to convert number to binary
+int conv_bin(int num) {
+    int result = 0;
+    int mul = 1;
+    int rem;
+    while (num > 0) {
+        result += mul*(num % 2);
+        mul *= 10;
+        num /= 2;
+    }
+    return result;
+}
+
 int main() {
 
     Receiver rcv;
@@ -46,14 +60,21 @@ int main() {
 
     vector<string> responces;
 
+    vector<map<string, int> > bundles {};
+
     for(string order : orders) {
         vector<string> words = split_sentence(order, ' ');
         vector<string> stocks;
         vector<string> qttys;
 
+        //cout << "Check1" << endl;
+
         int i = 0;
         for(; i < words.size() - 1 - 2; i += 2) {
             stocks[i] = words[i];
+
+            //cout << "Check2" << endl;
+
             qttys[i] = stoi(words[i+1]);
         }
         int price = stoi(words[i]);
@@ -73,9 +94,64 @@ int main() {
         } 
         // multi-stock order
         else {
-            
+            map<string, int> bundle;
+            for (int j = 0; j < (words.size()-3)/2; j++) {
+                bundle[stocks[2*j]] = stoi(qttys[2*j]);
+            }
+            bundle["price"] = price;
+            bundles.push_back(bundle);
         }
     }
+
+    // Checking for arbitrage:
+    // Finding the subsets of lines using binary numbers
+    int num_subsets = pow(2, bundles.size());
+    for (int j = 0; j < num_subsets; j++) {
+        // Taking a subset
+        int subsetIndex = conv_bin(j);
+        vector<map<string, int> > checkSet;
+        int counter = 0;
+        while (subsetIndex > 0) {
+            if (subsetIndex % 10 == 1) {
+                checkSet.push_back(bundles[counter]);
+            }
+            counter++; 
+        }
+        // checkedSet is subset of lines in which we have to check for arbitrage
+        vector<string> checkedStocks {};
+        int netPrice = 0;
+        int arbitFinder = 1; // Result = 0 => arbitrage not possible, Result = 1 => arbitrage possible
+        for (int k = 0; k < checkSet.size(); k++) {
+            int netQuantity = 0;
+            for (auto stock : checkSet[k]) {
+                if (stock.first != "price") {
+                    auto it = find(checkedStocks.begin(), checkedStocks.end(), stock.first);
+                    if (it == checkedStocks.end()) {
+                        int checkIterator = k;
+                        while (checkIterator < checkSet.size()) {
+                            netQuantity += checkSet[checkIterator][stock.first];
+                        }
+                        if (netQuantity != 0) {
+                            k = checkSet.size();
+                            arbitFinder = 0;
+                            break;
+                        }
+                        checkedStocks.push_back(stock.first);
+                    }
+                }
+            }
+        }
+        if (arbitFinder == 1) {
+            for (auto stock : checkSet) {
+               netPrice += stock["price"];
+            }
+            cout << "Arbitrage Possible, with price " << netPrice << endl;
+        } else {
+            cout << "Arbitrage Not Possible\n";
+        }
+
+    }
+    
 
     message = "";
     for(auto responce : responces) {
