@@ -1,9 +1,9 @@
 #include "receiver.h"
 // #include "iostream"
 // #include "string"
+#include <cmath>
 #include "vector"
 #include "map"
-
 using namespace std;
 
 vector<string> split_sentence(string str, char delem) {
@@ -32,8 +32,17 @@ bool accept_trade(int old_price, int curr_price, string direction) {
     return false;
 }
 
-void getSubsets(int j, vector<map<string, int> > bundles) {
-
+// Function to convert number to binary
+int conv_bin(int num) {
+    int result = 0;
+    int mul = 1;
+    int rem;
+    while (num > 0) {
+        result += mul*(num % 2);
+        mul *= 10;
+        num /= 2;
+    }
+    return result;
 }
 
 int main() {
@@ -89,10 +98,36 @@ int main() {
     }
 
     // Checking for arbitrage:
-    int num_lines = bundles.size();
-    for (int j = 0; j < num_lines; j++) {
-        getSubsets(j, bundles);
+    // Finding the subsets of lines using binary numbers
+    int num_subsets = pow(2, bundles.size());
+    for (int j = 0; j < num_subsets; j++) {
+        int subsetIndex = conv_bin(j);
+        vector<map<string, int> > checkSet;
+        int counter = 0;
+        while (subsetIndex > 0) {
+            if (subsetIndex % 10 == 1) {
+                checkSet.push_back(bundles[counter]);
+            }
+            counter++;
+        }
+        // Now we have a subset of lines in which we have to check for arbitrage
+        vector<string> checkedStocks {};
+        for (int k = 0; k < checkSet.size(); k++) {
+            int netQuantity = 0;
+            for (auto stock : checkSet[k]) {
+                if (checkedStocks.find(stock) == checkedStocks.end()) {
+                    int checkIterator = k;
+                    while (checkIterator < checkSet.size()) {
+                        netQuantity += checkSet[checkIterator][stock];
+                    }
+                    if (netQuantity == 0) {
+                    }
+                }
+                checkedStocks.push_back(stock);
+            }
+        }
     }
+    
 
     message = "";
     for(auto responce : responces) {
