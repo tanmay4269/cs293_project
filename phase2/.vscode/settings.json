@@ -3,6 +3,8 @@
     "array": "cpp",
     "map": "cpp",
     "format": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "fstream": "cpp",
+    "ostream": "cpp"
   }
 }

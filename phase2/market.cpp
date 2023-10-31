@@ -1,33 +1,38 @@
 #include "market.h"
 #include "market_manager.cpp"
-
-market::market(int argc, char** argv) 
-{
-
-}
+#include "iostream"
+#include "fstream"
+ 
+market::market(int argc, char **argv) {}
 
 void market::start()
 {
   ifstream inputFile("output.txt");
 
   string line;
-  int curr_timestamp = 0;
-  // (stock) -> (broker, price, # stocks, life_remaining)
-  buffer_dict sell_buffer; 
+  int curr_timestamp = 0; 
+
+  // each element is: (stock_name, broker, price, # stocks, life_remaining)
+  buffer_dict sell_buffer;
   buffer_dict buy_buffer;
+  vector<successful_exchange> exchanges;
 
   while (getline(inputFile, line)) {
     if(line == "TL") // start of the file
       continue;
-    if(line == "!@") // end of relevent data
+    if(line == "!@") {// end of relevent data
+      // update_buffers(sell_buffer, buy_buffer);
+      market_manager(sell_buffer, buy_buffer, exchanges);
       break;
+    }
 
     // breaks each line into individual words
     vector<string> words = split_sentence(line, ' ');
 
     int timestamp = stoi(words[0]);
     if(curr_timestamp != timestamp) {
-      // check matches by calling market_manager(~buffers~)
+      market_manager(sell_buffer, buy_buffer, exchanges);
+      update_buffers(sell_buffer, buy_buffer);
       curr_timestamp = timestamp;
     }
 
@@ -42,34 +47,16 @@ void market::start()
     };
 
     // inserting into buffers
-    if(words[2] == "SELL")
-      sell_buffer[stock_name].insert(value);
-    else if(words[2] == "BUY")
-      buy_buffer[stock_name].insert(value);
-  }
-
-  // shit be workin innit
-  cout << "----- Sellers -----\n";
-  for(auto& entries : sell_buffer) {
-    Node* curr = entries.second.root;
-    cout << entries.first << ": ";
-    while(curr) {
-      cout << curr->data.broker_name << " " << curr->data.price << " --- ";
-      curr = curr->next_node;
+    if(words[2] == "SELL") {
+      sell_buffer[stock_name].insert(value, 1);
     }
-    cout << endl;
-  }
-
-  cout << "----- Buyers -----\n";
-  for(auto& entries : buy_buffer) {
-    Node* curr = entries.second.root;    
-    cout << entries.first << ": ";
-    while(curr) {
-      cout << entries.first << " " << curr->data.broker_name << " " << curr->data.price << " --- ";
-      curr = curr->next_node;
+    else if(words[2] == "BUY") {
+      buy_buffer[stock_name].insert(value, 0); 
     }
-    cout << endl;
   }
 
+  print_exchanges(exchanges);
+  eod(exchanges);
+  
   inputFile.close();
 }
