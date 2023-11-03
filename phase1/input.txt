@@ -1,12 +1,3 @@
-ASML 650 s#
-ASML 645 b#
-AAPL 430 b#
-AAPL 435 b#
-AAPL 435 s#
-ASML 646 b#
-ASML 647 b#
-ASML 651 b#
-AAPL 432 s#
-ASML 654 s#
-ASML 652 s#
-ASML 650 s#
+X 1 Y -1 10 b#
+Z -1 Y 1 -15 b#
+Z 1 X -1 10 b#
