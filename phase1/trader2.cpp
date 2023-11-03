@@ -197,8 +197,10 @@ int main() {
                             for (auto stock : checkSet) {
                             netPrice += stock["price"];
                             }
-                            std::cout << "Arbitrage Possible, with price " << netPrice << endl;
-                            arbitrage_set[checkSet] = netPrice;
+                            if (netPrice > 0) {
+                                std::cout << "Arbitrage Possible, with price " << netPrice << endl;
+                                arbitrage_set[checkSet] = netPrice;
+                            }
                         }
                         // else {
                         //     std::cout << "No Trade";
