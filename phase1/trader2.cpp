@@ -116,12 +116,17 @@ int main() {
 
         // single stock order
         if(words.size() == 3) {
+            //std::cout << "I am alive" << endl;
             if(price_buffers.find(stocks[0]) == price_buffers.end() || 
                 accept_trade(price_buffers[stocks[0]], price, direction)) {
                 string dir = (direction == "s") ? "b" : "s";
                 string responce = stocks[0] + " " + to_string(price) + " " + dir;
                 price_buffers[stocks[0]] = price;
                 responces.push_back(responce);
+                map<string, int> bundle {};
+                bundle[stocks[0]] = stoi(words[1]);
+                bundle["price"] = price;
+                bundles.push_back(bundle);
             } else {
                 responces.push_back("No trade");
             }
@@ -132,9 +137,8 @@ int main() {
             for (int j = 0; j < stocks.size(); j++) {
                 bundle[stocks[j]] = qttys[j];
             }
+            if (direction == "s") price *= -1;
             bundle["price"] = price;
-            ////// Later we also have to take care of the direction
-            ////// Simply reverse the sign of the price according to the direction
             bundles.push_back(bundle);
 
             // Checking for arbitrage:
@@ -193,9 +197,10 @@ int main() {
                             netPrice += stock["price"];
                             }
                             std::cout << "Arbitrage Possible, with price " << netPrice << endl;
-                        } else {
-                            std::cout << "Arbitrage Not Possible\n";
                         }
+                        // else {
+                        //     std::cout << "Arbitrage Not Possible\n";
+                        // }
                     }
                     //std::cout << "Exiting" << endl;
                 }
