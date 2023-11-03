@@ -14,7 +14,7 @@
 
 class Receiver
 {
-    const int PORT = 60000;
+    const int PORT = 50000;
     const static int BUFFER_SIZE = 1024;
 
     int serverSocket, clientSocket;

@@ -4,6 +4,8 @@
 #include <cmath>
 #include "vector"
 #include "map"
+#include "algorithm"
+#include "iostream"
 using namespace std;
 
 vector<string> split_sentence(string str, char delem) {
@@ -16,14 +18,16 @@ vector<string> split_sentence(string str, char delem) {
             word = "";
         }
         else {
-            word = word + x;
+            if(x != '\n') {
+                word = word + x;
+            }
         }
     }
     split_result.push_back(word);
 
     return split_result;
 }
-
+ 
 bool accept_trade(int old_price, int curr_price, string direction) {
     if((direction == "b" && old_price < curr_price) || (direction == "s" && old_price > curr_price)) {
         return true;
@@ -46,15 +50,27 @@ int conv_bin(int num) {
 }
 
 int main() {
+    // Receiver rcv;
+    // sleep(5);
+    // string message = rcv.readIML();
 
-    Receiver rcv;
-    sleep(5);
-    string message = rcv.readIML();
+    string message = "X 1 Y -1 10 b#\nZ -1 Y 1 -15 b#";
 
-    message.pop_back();
-    message.pop_back();
+    /*
+    X 1 Y -1 10 b#
+    Z -1 Y 1 -15 b#
+    X 1 Y -1 20 b#
+    Z -1 Y 1 -10 b#
+    Z 1 X -1 15 b#
+    Z 1 X -1 20 b#
+    Z 1 X -1 10 b#
+    */
+
+    // message.pop_back();
+    // message.pop_back();
 
     vector<string> orders = split_sentence(message, '#');
+    orders.pop_back();
 
     map<string, int> price_buffers;
 
@@ -65,23 +81,26 @@ int main() {
     for(string order : orders) {
         vector<string> words = split_sentence(order, ' ');
         vector<string> stocks;
-        vector<string> qttys;
-
-        //cout << "Check1" << endl;
+        vector<int> qttys;
 
         int i = 0;
         for(; i < words.size() - 1 - 2; i += 2) {
-            stocks[i] = words[i];
+            stocks.push_back(words[i]);
 
-            //cout << "Check2" << endl;
-
-            qttys[i] = stoi(words[i+1]);
+            qttys.push_back(stoi(words[i+1]));
         }
-        int price = stoi(words[i]);
-        string direction = words[i+1];
+        
+        int price = 0;
+        string direction = "";
+
+        if(i == 0) {
+            stocks.push_back(words[i]);
+            price = stoi(words[i+1]);
+            direction = words[i+2];
+        }
 
         // single stock order
-        if(words.size() == 4) {
+        if(words.size() == 3) {
             if(price_buffers.find(stocks[0]) == price_buffers.end() || 
                 accept_trade(price_buffers[stocks[0]], price, direction)) {
                 string dir = (direction == "s") ? "b" : "s";
@@ -96,7 +115,7 @@ int main() {
         else {
             map<string, int> bundle;
             for (int j = 0; j < (words.size()-3)/2; j++) {
-                bundle[stocks[2*j]] = stoi(qttys[2*j]);
+                bundle[stocks[2*j]] = qttys[2*j];
             }
             bundle["price"] = price;
             bundles.push_back(bundle);

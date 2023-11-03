@@ -9,10 +9,10 @@
 #include <netinet/in.h>
 #include <fstream>
 
-const int PORT = 60000;
+const int PORT = 50000;
 const int BUFFER_SIZE = 1024;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) { 
     std::string filepath = argv[1];
 
     // Create a socket
