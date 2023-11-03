@@ -89,6 +89,7 @@ int main() {
     vector<string> responces;
 
     vector<map<string, int> > bundles {};
+    map<vector<map<string, int> >, int > arbitrage_set {};
 
     for(string order : orders) {
         vector<string> words = split_sentence(order, ' ');
@@ -197,9 +198,10 @@ int main() {
                             netPrice += stock["price"];
                             }
                             std::cout << "Arbitrage Possible, with price " << netPrice << endl;
+                            arbitrage_set[checkSet] = netPrice;
                         }
                         // else {
-                        //     std::cout << "Arbitrage Not Possible\n";
+                        //     std::cout << "No Trade";
                         // }
                     }
                     //std::cout << "Exiting" << endl;
@@ -207,6 +209,13 @@ int main() {
             }
         }
     }
+    /// Finding the best arbitrage possibility
+    // int maxPrice = 0;
+    // for (auto set : arbitrage_set) {
+    //     if (set.second > maxPrice) {
+    //         vector<map<string, int> > max_set = set.first;
+    //     }
+    // }
     
 
     message = "";
