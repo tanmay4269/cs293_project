@@ -88,8 +88,9 @@ int main() {
 
     vector<string> responces;
 
+    int arbitFinder = 3;
     vector<map<string, int> > bundles {};
-    map<vector<map<string, int> >, int > arbitrage_set {};
+    map<int, int > arbitrage_set {};
 
     for(string order : orders) {
         vector<string> words = split_sentence(order, ' ');
@@ -149,6 +150,7 @@ int main() {
                 for (int j = 0; j < num_subsets; j++) {
                     // Taking a subset
                     int subsetIndex = conv_bin(j);
+                    int temp = subsetIndex;
                     //std::cout << "subsetIndex = " << subsetIndex << endl;
                     //std::cout << "subsetCardinality(subsetIndex) " << subsetCardinality(subsetIndex) << endl;
                     if (subsetCardinality(subsetIndex) > 1) {
@@ -164,11 +166,12 @@ int main() {
                             subsetIndex /= 10;
                             counter++; 
                         }
+                        subsetIndex = temp;
                         //std::cout << "Checkset done and its size is: " << checkSet.size() << endl;
                         // checkedSet is subset of lines in which we have to check for arbitrage
                         vector<string> checkedStocks {};
                         int netPrice = 0;
-                        int arbitFinder = 1; // Result = 0 => arbitrage not possible, Result = 1 => arbitrage possible
+                        arbitFinder = 1; // Result = 0 => arbitrage not possible, Result = 1 => arbitrage possible
                         for (int k = 0; k < checkSet.size(); k++) {
                             int netQuantity = 0;
                             for (auto stock : checkSet[k]) {
@@ -198,26 +201,47 @@ int main() {
                             netPrice += stock["price"];
                             }
                             if (netPrice > 0) {
-                                std::cout << "Arbitrage Possible, with price " << netPrice << endl;
-                                arbitrage_set[checkSet] = netPrice;
+                                //std::cout << "Arbitrage Possible, with price " << netPrice << endl;
+                                //cout << "Putting in arbitrage set " << subsetIndex << endl;
+                                arbitrage_set[subsetIndex] = netPrice;
                             }
                         }
                         // else {
-                        //     std::cout << "No Trade";
+                        //     std::cout << "No Trade" <<  endl;
                         // }
                     }
                     //std::cout << "Exiting" << endl;
                 }
             }
         }
+        if (arbitFinder == 0) {
+            cout << "No Trade" << endl;
+        }
     }
     /// Finding the best arbitrage possibility
-    // int maxPrice = 0;
-    // for (auto set : arbitrage_set) {
-    //     if (set.second > maxPrice) {
-    //         vector<map<string, int> > max_set = set.first;
-    //     }
-    // }
+    if (arbitFinder == 1) {
+        int max_set = 0;
+        int maxPrice = 0;
+        for (auto set : arbitrage_set) {
+            if (set.second > maxPrice) {
+                max_set = set.first;
+                maxPrice = set.second;
+            }
+        }
+        int counter2 = 0;
+        vector<int> printSet {};
+        while (max_set > 0) {
+            if (max_set % 10 == 1) {
+                printSet.push_back(counter2);
+                max_set /= 10;
+                counter2++;
+            }
+        }
+        for (int i = printSet.size() - 1; i >= 0; i--) {
+            cout << orders[printSet[i]] << endl;
+        }
+        cout << maxPrice << endl;;
+    }
     
 
     message = "";
