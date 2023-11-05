@@ -8,7 +8,7 @@ struct KeyValuePair {
 };
 
 template <typename K, typename V>
-class CustomHashMap {
+class Old_CustomHashMap {
 private:
     size_t hashFunction(const K& key) {
         // Simple hash function for strings
@@ -21,7 +21,7 @@ private:
 public:
     std::vector<std::vector<KeyValuePair<K, V>>> table;
     size_t size;
-    CustomHashMap(size_t size = 50) : table(size), size(0) {}
+    Old_CustomHashMap(size_t size = 50) : table(size), size(0) {}
 
     void insert(const K& key, const V& value) {
         size_t index = hashFunction(key);
@@ -67,3 +67,77 @@ public:
         return false;
     }
 };
+
+
+template <typename K, typename V>
+class CustomHashMap {
+public:
+    size_t hashFunction(const K &key) {
+        // Simple hash function for strings
+        size_t hash = 0;
+        for (char c : key) {
+            hash = hash * 31 + c;
+        }
+        return hash % table.size();
+    }
+
+    std::vector<std::vector<KeyValuePair<K, V>>> table;
+    std::vector<K> insertionOrder;
+    size_t size;
+
+    CustomHashMap(size_t size = 50) : table(size), size(0) {}
+
+    void insert(const K &key, const V &value) {
+        size_t index = hashFunction(key);
+        for (auto &pair : table[index]) {
+            if (pair.key == key) {
+                pair.value = value;
+                return;
+            }
+        }
+        table[index].push_back({key, value});
+        insertionOrder.push_back(key);
+        size++;
+    }
+
+    V &operator[](const K &key) {
+        size_t index = hashFunction(key);
+        for (auto &pair : table[index]) {
+            if (pair.key == key) {
+                return pair.value;
+            }
+        }
+        table[index].push_back({key, V()});
+        insertionOrder.push_back(key);
+        size++;
+        return table[index].back().value;
+    }
+
+    V &at(const K &key) {
+        size_t index = hashFunction(key);
+        for (auto &pair : table[index]) {
+            if (pair.key == key) {
+                return pair.value;
+            }
+        }
+        throw std::out_of_range("Key not found");
+    }
+
+    bool contains(const K &key) {
+        size_t index = hashFunction(key);
+        for (const auto &pair : table[index]) {
+            if (pair.key == key) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void printInsertionOrder() {
+        for (const auto &key : insertionOrder) {
+            std::cout << key << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+

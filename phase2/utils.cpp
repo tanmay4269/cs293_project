@@ -34,6 +34,13 @@ int min(int a, int b) {
   }
 }
 
+int max(int a, int b) {
+  if(a > b) {
+    return a;
+  } else {
+    return b;
+  }
+}
 
 void print_exchanges(vector<successful_exchange>& exchanges) {
   for(auto& exchange : exchanges) {

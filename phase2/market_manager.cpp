@@ -1,7 +1,9 @@
 #include "utils.cpp"
 using namespace std;
 
+// updates life_remaining and deletion of entries 
 void update_buffers(buffer_dict& sell_buffer, buffer_dict& buy_buffer) {
+  // update sell buffer
   for(auto& bucket : sell_buffer.table) {
     for(auto& pair : bucket) {
       auto curr_ptr = pair.value.root;
@@ -25,6 +27,7 @@ void update_buffers(buffer_dict& sell_buffer, buffer_dict& buy_buffer) {
     }
   }
 
+  // update buy buffer
   for(auto& bucket : buy_buffer.table) {
     for(auto& pair : bucket) {
       auto curr_ptr = pair.value.root;
@@ -49,12 +52,15 @@ void update_buffers(buffer_dict& sell_buffer, buffer_dict& buy_buffer) {
   }
 }
 
+
 void market_manager(buffer_dict& sell_buffer, buffer_dict& buy_buffer, vector<successful_exchange>& exchanges) {
   Node* sell_pointer;
   Node* buy_pointer;
-
-  for(auto& bucket : sell_buffer.table) {
-    for(auto& pair : bucket) {
+  
+  for(auto& key : sell_buffer.insertionOrder) {
+    size_t index = sell_buffer.hashFunction(key);
+    for(auto& pair : sell_buffer.table[index]) {
+      // go to next sell entry if no corrosponding buy orders
       if(!buy_buffer.contains(pair.key)) {
         continue;
       }
@@ -62,6 +68,7 @@ void market_manager(buffer_dict& sell_buffer, buffer_dict& buy_buffer, vector<su
       sell_pointer = pair.value.root;
       buy_pointer  = buy_buffer.at(pair.key).root;
 
+      // traversing both the linked lists 
       while(sell_pointer && buy_pointer) {
         // order is accepted
         if(sell_pointer->data.price <= buy_pointer->data.price) {
@@ -69,7 +76,8 @@ void market_manager(buffer_dict& sell_buffer, buffer_dict& buy_buffer, vector<su
           int qtty = min(sell_pointer->data.quantity, buy_pointer->data.quantity);
           if(sell_pointer->data.time_of_entry <= buy_pointer->data.time_of_entry) {
             price = sell_pointer->data.price;
-          } else {
+          } 
+          else {
             price = buy_pointer->data.price;
           }
 
