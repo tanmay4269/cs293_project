@@ -1,6 +1,5 @@
 // This is your trader. Place your orders from here
 
-
 #include <string>
 
 int reader(int time)

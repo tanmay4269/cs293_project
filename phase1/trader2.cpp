@@ -1,4 +1,4 @@
-#include "receiver.h"
+// #include "receiver.h"
 // #include "iostream"
 // #include "string"
 #include <cmath>
@@ -6,6 +6,8 @@
 #include "map"
 #include "algorithm"
 #include "iostream"
+
+#include "fstream"
 using namespace std;
 
 vector<string> split_sentence(string str, char delem) {
@@ -62,23 +64,21 @@ int subsetCardinality(int num)
 }
 
 int main() {
-    Receiver rcv;
-    sleep(5);
-    string message = rcv.readIML();
+    // Receiver rcv;
+    // sleep(5);
+    // string message = rcv.readIML();
 
-    //string message = "X 1 Y -1 10 b#\nZ -1 Y 1 -15 b#";
+    ifstream inputFile("_input.txt");
+    string line;
+    string message;
+    while (getline(inputFile, line)) {
+        message += line;
+        message += "\n";
+    }
+    message.pop_back();
 
-    /*
-    X 1 Y -1 10 b#
-    Z -1 Y 1 -15 b#
-    X 1 Y -1 20 b#
-    Z -1 Y 1 -10 b#
-    Z 1 X -1 15 b#
-    Z 1 X -1 20 b#
-    Z 1 X -1 10 b#
-    */
+    cout << message << endl;
 
-    // message.pop_back();
     // message.pop_back();
 
     vector<string> orders = split_sentence(message, '#');

@@ -8,6 +8,8 @@
 // void market::start()
 // {
 
+bool print_buffer_data = false;
+
 int main() {
   ifstream inputFile("output.txt");
 
@@ -26,7 +28,12 @@ int main() {
     }
 
     if(line == "!@") {// end of relevent data
-      // update_buffers(sell_buffer, buy_buffer);
+      if(print_buffer_data) {
+        cout << "\t<" << time_of_entry << ">" << endl;
+        print_buffers(sell_buffer, buy_buffer);
+        cout << "\t</" << time_of_entry << ">" << endl;
+      }
+
       market_manager(sell_buffer, buy_buffer, exchanges);
       break;
     }
@@ -35,8 +42,21 @@ int main() {
     vector<string> words = split_sentence(line, ' ');
 
     int timestamp = stoi(words[0]);
+    
+    if(print_buffer_data) {
+      cout << "\t<" << time_of_entry << ">" << endl;
+      print_buffers(sell_buffer, buy_buffer);
+      cout << "\t</" << time_of_entry << ">" << endl;
+    }
+    market_manager(sell_buffer, buy_buffer, exchanges);
+
     if(curr_timestamp != timestamp) {
-      market_manager(sell_buffer, buy_buffer, exchanges);
+      // if(print_buffer_data) {
+      //   cout << "\t<" << time_of_entry << ">" << endl;
+      //   print_buffers(sell_buffer, buy_buffer);
+      //   cout << "\t</" << time_of_entry << ">" << endl;
+      // }
+
       update_buffers(sell_buffer, buy_buffer);
       curr_timestamp = timestamp;
     }
@@ -61,23 +81,16 @@ int main() {
 
     time_of_entry++;
   }
+  cout << endl;
 
-  // for(auto& bucket : sell_buffer.table) {
-  //   for(auto& pair : bucket) {
-  //     cout << pair.key << endl;
-  //   }
-  // }
-
-  // for (auto &key : sell_buffer.insertionOrder) {
-  //   size_t index = sell_buffer.hashFunction(key);
-  //   for (auto &pair : sell_buffer.table[index]) {
-  //     cout << pair.key << endl;
-  //   }
-  // }
+  // cout << "\t<" << time_of_entry << ">" << endl;
+  // print_buffers(sell_buffer, buy_buffer);
+  // cout << "\t</" << time_of_entry << ">" << endl;
 
   // printing final results
-  print_exchanges(exchanges);
+  // print_exchanges(exchanges);
   eod(exchanges);
+  broker_wise_data(exchanges);
   
   inputFile.close();
 }

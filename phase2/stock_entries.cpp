@@ -8,7 +8,6 @@ struct stock_entry {
     int quantity;
     int time_of_entry;
     int life_remaining;
-    int time_of_entry_in_same_timestamp;
 };
 
 struct successful_exchange {

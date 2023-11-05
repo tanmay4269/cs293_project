@@ -9,7 +9,8 @@ void update_buffers(buffer_dict& sell_buffer, buffer_dict& buy_buffer) {
       auto curr_ptr = pair.value.root;
 
       while(curr_ptr) {
-        if(curr_ptr->data.life_remaining == 0) {
+        if(curr_ptr->data.life_remaining == 0 ||
+        curr_ptr->data.quantity == 0) {
           pair.value.remove(curr_ptr);
           
           curr_ptr = curr_ptr->next_node;
@@ -33,7 +34,8 @@ void update_buffers(buffer_dict& sell_buffer, buffer_dict& buy_buffer) {
       auto curr_ptr = pair.value.root;
 
       while(curr_ptr) {
-        if(curr_ptr->data.life_remaining == 0) {
+        if(curr_ptr->data.life_remaining == 0 ||
+        curr_ptr->data.quantity == 0) {
           pair.value.remove(curr_ptr);
 
           curr_ptr = curr_ptr->next_node;
@@ -91,7 +93,13 @@ void market_manager(buffer_dict& sell_buffer, buffer_dict& buy_buffer, vector<su
           sell_pointer->data.quantity -= qtty;
           buy_pointer->data.quantity -= qtty;
 
-          exchanges.push_back(exchange);
+          bool self_arbitrage = sell_pointer->data.time_of_entry >= buy_pointer->data.time_of_entry &&
+            exchange.buyer_name == exchange.seller_name;
+
+          if(true) { // !self_arbitrage
+            exchanges.push_back(exchange);
+            cout << exchange.buyer_name << " purchased " << exchange.num_shares << " shares of " << exchange.stock_name << " from " << exchange.seller_name << " for $" << exchange.price_per_share << "/share\n";
+          }
 
           if(sell_pointer->data.quantity == 0) {
             auto temp = sell_pointer->next_node;

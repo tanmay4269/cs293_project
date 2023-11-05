@@ -6,6 +6,7 @@
 #include "map"
 #include "algorithm"
 #include "iostream"
+#include "fstream"
 using namespace std;
 
 vector<string> split_sentence(string str, char delem) {
@@ -54,7 +55,16 @@ int main() {
     // sleep(5);
     // string message = rcv.readIML();
 
-    string message = "X 1 Y -1 10 b#\nZ -1 Y 1 -15 b#";
+    ifstream inputFile("_input.txt");
+    string line;
+    string message;
+    while (getline(inputFile, line)) {
+        message += line;
+        message += "\n";
+    }
+    message.pop_back();
+
+    cout << message << endl;
 
     /*
     X 1 Y -1 10 b#

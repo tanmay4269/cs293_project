@@ -1,0 +1,53 @@
+AA purchased 3 shares of AMD from AKG for $242/share
+SM purchased 7 shares of NFLX from AKG for $290/share
+OT purchased 11 shares of AMD from OT for $271/share
+SM purchased 2 shares of GE from AKG for $107/share
+KA purchased 3 shares of GE from AKG for $43/share
+SV purchased 9 shares of GE from SV for $486/share
+OT purchased 5 shares of AMD from AA for $422/share
+AA purchased 1 shares of AMD from AA for $242/share
+SV purchased 3 shares of GE from GS for $486/share
+KA purchased 3 shares of GE from GS for $337/share
+AA purchased 5 shares of AMZN from KG for $166/share
+AA purchased 7 shares of AMZN from KA for $379/share
+AA purchased 4 shares of AMD from GS for $242/share
+SV purchased 1 shares of AMD from GS for $200/share
+SM purchased 4 shares of AMD from GS for $192/share
+AA purchased 2 shares of AMZN from SV for $379/share
+SV purchased 7 shares of AMZN from SV for $350/share
+SV purchased 5 shares of GE from SM for $87/share
+SV purchased 0 shares of GE from GS for $138/share
+KA purchased 3 shares of NFLX from KA for $350/share
+SM purchased 3 shares of GE from KG for $35/share
+SM purchased 7 shares of GE from GS for $138/share
+KA purchased 9 shares of NFLX from AA for $459/share
+AKG purchased 3 shares of GE from GS for $138/share
+AKG purchased 12 shares of GE from AKG for $211/share
+KA purchased 0 shares of AMD from GS for $354/share
+OT purchased 3 shares of AAPL from GS for $377/share
+KA purchased 13 shares of AMD from OT for $354/share
+KA purchased 0 shares of AMD from SV for $354/share
+SM purchased 1 shares of AMD from SV for $297/share
+OT purchased 2 shares of AAPL from SM for $380/share
+OT purchased 4 shares of GE from KG for $290/share
+OT purchased 6 shares of GE from OT for $290/share
+KA purchased 3 shares of GE from OT for $284/share
+SM purchased 5 shares of AMZN from AKG for $111/share
+SV purchased 6 shares of GE from OT for $99/share
+SV purchased 8 shares of GE from SV for $300/share
+SM purchased 6 shares of GE from OT for $29/share
+SM purchased 1 shares of GE from AKG for $30/share
+OT purchased 0 shares of AAPL from SV for $380/share
+
+---End of Day---
+Total Amount of Money Transferred: 47830
+Number of Completed Trades: 40
+Number of Shares Traded: 177
+SM bought 36 and sold 7 for a net transfer of $-3944
+SV bought 39 and sold 27 for a net transfer of $-1632
+AKG bought 15 and sold 33 for a net transfer of $3270
+AA bought 22 and sold 15 for a net transfer of $306
+OT bought 31 and sold 45 for a net transfer of $1061
+KA bought 34 and sold 10 for a net transfer of $-8072
+GS bought 0 and sold 28 for a net transfer of $6916
+KG bought 0 and sold 12 for a net transfer of $2095
